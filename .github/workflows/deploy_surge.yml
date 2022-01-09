@@ -2,28 +2,21 @@
 
 name: deploy website
 
-# Controls when the workflow will run
-on:
-  push:
-    branches: [ master ]
+name: Deploy Website
+
+on: [push]
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    name: Deploying to surge
     steps:
-    - uses: actions/checkout@v2
-
-    - name: Setup Node
-      uses: actions/setup-node@v2-beta
-      with:
+      - uses: actions/checkout@v2
+      - name: Install Node.js
+        uses: actions/setup-node@v2-beta
+        with:
           node-version: 12
-
-    - name: Build React App
-      run: |
-        npm install # Install Dependencies
-        CI=false npm run build # CI=false to ignore warnings
-    - name: Install Surge
-      run: npm install -g surge
-    - name: Deploy to Surge
+      - name: Install Surge
+        run: npm install -g surge
+      - name: Run surge
       run:  surge ./build https://knowing-size.surge.sh// --token ${{secrets.surge_token}}
